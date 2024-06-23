@@ -1,80 +1,58 @@
-#include <stdio.h>
-#define v 100
-int top=-1;
-void indegree(int a_matrix[v][v],int n,int in[v])
+#include<stdio.h>
+
+void main()
 {
+ int n, a[30][30],i,j,sum,in[30],s[30],t[30],k=0;
+ printf("Enter no of vertices: ");
+ scanf("%d",&n);
+ printf("Enter adjacency matrix:\n");
+ for(i=0;i<n;i++)
+ {
+     for(j=0;j<n;j++)
+     {
+         scanf("%d",&a[i][j]);
+     }
+ }
+ for(j=0;j<n;j++)
+ {
+     sum=0;
+     for(i=0;i<n;i++)
+     {
+         sum+=a[i][j];
+     }
+     in[j]=sum;
+ }
+ int top=-1;
+ for(i=0;i<n;i++)
+ {
+     if(in[i]==0)
+     {
+         top++;
+         s[top]=i;
+     }
+
+ }
+ while(top!=-1)
+ {
+    int u=s[top];
+    top--;
+    t[k++]=u;
     for(int i=0;i<n;i++)
     {
-        for(int j=0;j<n;j++)
+        if(a[u][i]==1)
         {
-            if(a_matrix[i][j])
+            in[i]--;
+            if(in[i]==0)
             {
-                in[j]++;
+                top++;
+                s[top]=i;
             }
         }
     }
-}
-void toposort(int a_matrix[v][v],int n)
-{
-    int in[v]={0};
-    int topo[v];
-    int k=0;
-
-    int s[v]={0};
-    indegree(a_matrix,n,in);
-    for(int i=0;i<n;i++)
+ }
+    printf("Sequence: ");
+    for(i=0;i<n;i++)
     {
-        if(in[i]==0)
-        {
-           top++;
-           s[top]=i;
-
-        }
+        printf("%d ",t[i]);
     }
-    while(top!=-1)
-    {
-        int vertex=s[top];
-        top--;
-        topo[k++]=vertex;
-        for(int i=0;i<n;i++)
-        {
-            if(a_matrix[vertex][i])
-            {
-                in[i]--;
-                if(in[i]==0)
-                {
-                    top++;
-                    s[top]=i;
-                }
-            }
-        }
-    }
-    if(k!=n)
-    {
-        printf("cycle exists");
-    }
-    else{
-    printf("the topological sort:");
-    for(int i=0;i<n;i++)
-    {
-        printf("%d ",topo[i]+1);
-    }
-    }
-}
-int main()
-{
-    int a_matrix[v][v];
-    int n;
-    printf("enter the no of vertices:");
-    scanf("%d",&n);
-    printf("enter the adjaceny matrix:\n");
-    for(int i=0;i<n;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            scanf("%d",&a_matrix[i][j]);
-        }
-    }
-    toposort(a_matrix,n);
-    return 0;
 }
